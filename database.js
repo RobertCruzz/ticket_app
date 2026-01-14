@@ -19,7 +19,7 @@ const [rows] = await pool.query("SELECT * FROM tickets");
 return rows;
 };
 //function that retrieves a specific ticket by customer_id from the "tickets" table in the database. we use "?" as a placeholder for the id parameter because it may come through user input or HTTP requests. we return rows[0] to get the first matching ticket since customer_id should be unique.
-async function getNoteById(id) {
+async function getTicketById(id) {
   const [rows] = await pool.query("SELECT * FROM tickets WHERE customer_id = ?", [id]);
   return rows[0];
 };
@@ -40,25 +40,25 @@ async function getTicketByStatus(status) {
     [customer_name, ticket_priority, ticket_status]
   );
    const newTicketId = result.insertId;
-   const ticket_info = await getNoteById(newTicketId);
+   const ticket_info = await getTicketById(newTicketId);
    return ticket_info;
-}
+};
 
 //prints all tickets and a specific ticket to the console for testing purposes.
-const tickets = await getAllTickets();
-console.log(tickets);
-//prints ticket with customer_id 1
-const ticketID = await getNoteById(1);
-console.log(ticketID);
-//prints tickets with High priority
-const ticketPriority = await getTicketByPriority('High');
-console.log(ticketPriority);
-//prints tickets with In Progress status
-const ticketStatus = await getTicketByStatus('In Progress');
-console.log(ticketStatus);
-//creates a new ticket and prints it to the console for testing purposes.
-const newTicket = await createNewTicket('Bobby Cruz', 'High', 'Closed');
-console.log(newTicket);
+// const tickets = await getAllTickets();
+// console.log(tickets);
+// //prints ticket with customer_id 1
+// const ticketID = await getTicketById(1);
+// console.log(ticketID);
+// //prints tickets with High priority
+// const ticketPriority = await getTicketByPriority('High');
+// console.log(ticketPriority);
+// //prints tickets with In Progress status
+// const ticketStatus = await getTicketByStatus('In Progress');
+// console.log(ticketStatus);
+// //creates a new ticket and prints it to the console for testing purposes.
+// const newTicket = await createNewTicket('Bobby Cruz', 'High', 'Closed');
+// console.log(newTicket);
 
-
+export {getAllTickets, getTicketById, getTicketByPriority, getTicketByStatus, createNewTicket};
 

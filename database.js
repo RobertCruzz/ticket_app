@@ -33,8 +33,16 @@ async function getTicketByStatus(status) {
   const [rows] = await pool.query("SELECT * FROM tickets WHERE ticket_status = ?", [status]);
   return rows;
 };
-
-
+//function that creates a new ticket in the "tickets" table in the database. We use placeholders for the parameters because they may come through user input or HTTP requests. After inserting the new ticket, we retrieve it using its insertId to return the complete ticket information.
+ async function createNewTicket(customer_name, ticket_priority, ticket_status) {
+  const [result] = await pool.query(
+    "INSERT INTO tickets (customer_name, ticket_priority, ticket_status) VALUES (?, ?, ?)",
+    [customer_name, ticket_priority, ticket_status]
+  );
+   const newTicketId = result.insertId;
+   const ticket_info = await getNoteById(newTicketId);
+   return ticket_info;
+}
 
 //prints all tickets and a specific ticket to the console for testing purposes.
 const tickets = await getAllTickets();
@@ -48,5 +56,9 @@ console.log(ticketPriority);
 //prints tickets with In Progress status
 const ticketStatus = await getTicketByStatus('In Progress');
 console.log(ticketStatus);
+//creates a new ticket and prints it to the console for testing purposes.
+const newTicket = await createNewTicket('Bobby Cruz', 'High', 'Closed');
+console.log(newTicket);
+
 
 
